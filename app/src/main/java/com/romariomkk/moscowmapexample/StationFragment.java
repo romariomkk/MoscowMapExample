@@ -15,7 +15,7 @@ import com.romariomkk.moscowmapexample.model.RecyclerAdapter;
 import java.util.Objects;
 
 /**
- * Created by romariomkk on 29.12.2016.
+ * Created by romariomkk on 29.05.2017.
  */
 public class StationFragment extends Fragment {
 
@@ -49,15 +49,15 @@ public class StationFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        Context contxt = getContext();
-        ContentManager contentManager = new ContentManager(contxt);
+        Context context = getContext();
+        ContentManager contentManager = ContentManager.getInstance(context);
 
-        adapter = new RecyclerAdapter(contxt, contentManager.retrieveModels(fragmentIndex == 0
+        adapter = new RecyclerAdapter(context, contentManager.retrieveModels(fragmentIndex == 0
                 ? ContentManager.ComparedPoint.DISTANCE
                 : ContentManager.ComparedPoint.PRICE));
-        adapter.setOnItemClickListener((MainActivity) contxt);
+        adapter.setOnItemClickListener((MainActivity) getActivity());
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(contxt));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
     }
 

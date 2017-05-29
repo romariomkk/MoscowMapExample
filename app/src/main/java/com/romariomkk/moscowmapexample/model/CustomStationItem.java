@@ -1,16 +1,8 @@
 package com.romariomkk.moscowmapexample.model;
 
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,14 +21,18 @@ public class CustomStationItem extends RelativeLayout {
     private StationModel station;
 
     public CustomStationItem(Context context){
-        super(context);
+        this(context, null);
+    }
+
+    public CustomStationItem(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
         initInflater();
         initFields();
     }
 
     private void initInflater() {
-        LayoutInflater inflater = (LayoutInflater) getContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = LayoutInflater.from(getContext());
         inflater.inflate(R.layout.custom_station_item, this, true);
     }
 
@@ -52,6 +48,11 @@ public class CustomStationItem extends RelativeLayout {
     public void setStation(StationModel st){
         this.station = st;
 
+        refreshUI();
+    }
+
+    private void refreshUI()
+    {
         priceText.setText(String.valueOf(station.price));
         lastUpdateText.setText(station.lastUpdateTime);
         brandLogoImage.setImageBitmap(station.brandLogo);

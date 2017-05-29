@@ -1,9 +1,9 @@
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="bottom">
+    android:layout_height="match_parent">
 
     <!-- MainActivity content, including map -->
     <FrameLayout
@@ -15,13 +15,21 @@
         <include layout="@layout/toolbar"/>
 
     </FrameLayout>
-    <!-- -->
 
     <!--The content of sliding panel itself-->
     <LinearLayout
+        android:id="@+id/bottomSheetView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_behavior="@string/bottom_sheet_behavior"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="48dp">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ticker_background"/>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
@@ -37,4 +45,4 @@
             android:layout_height="300dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     </LinearLayout>
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+</android.support.design.widget.CoordinatorLayout>

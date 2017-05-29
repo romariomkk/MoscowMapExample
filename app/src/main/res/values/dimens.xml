@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="small_margin">4dp</dimen>
+    <dimen name="middle_margin">8dp</dimen>
+    <dimen name="big_margin">16dp</dimen>
+    <dimen name="padding_vertical">12dp</dimen>
+    <dimen name="padding_horizontal">8dp</dimen>
+    <dimen name="default_radius">4dp</dimen>
+</resources>

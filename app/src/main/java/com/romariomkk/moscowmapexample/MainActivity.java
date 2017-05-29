@@ -2,6 +2,8 @@ package com.romariomkk.moscowmapexample;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -9,7 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
+import android.view.View;
 import android.view.Window;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap gMap;
     private TextView title;
 
+    private View bottomSheetView;
+    private CoordinatorLayout coordLayout;
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
@@ -43,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    @NonNull
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.person);
@@ -53,6 +58,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         title.setText(R.string.app_name);
 
         setSupportActionBar(toolbar);
+
+        coordLayout = (CoordinatorLayout) findViewById(R.id.coordLayout);
+        bottomSheetView = coordLayout.findViewById(R.id.bottomSheetView);
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheetView);
     }
 
     private int getStatusBarHeight() {
@@ -112,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         LatLng moscow = new LatLng(55.754463, 37.608646);
         gMap.addMarker(new MarkerOptions().position(moscow).title("Marker in Moscow"));
-
+        //// TODO: 29.05.2017 make more points
         gMap.moveCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(
                 new LatLng(moscow.latitude - 0.01, moscow.longitude - 0.01),
                 new LatLng(moscow.latitude + 0.01, moscow.longitude + 0.01)), metrics.widthPixels, metrics.heightPixels, 0));
