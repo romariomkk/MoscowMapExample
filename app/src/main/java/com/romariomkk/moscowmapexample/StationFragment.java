@@ -25,7 +25,7 @@ public class StationFragment extends Fragment {
     public final static String DISTANCE_BASED_FRAGLIST = "By distance";
     public final static String PRICE_BASED_FRAGLIST = "By price";
 
-    private static int fragmentIndex = 0;
+    private int fragmentIndex = 0;
 
     public static StationFragment newInstance(String name) {
         Bundle extras = new Bundle();
@@ -34,8 +34,19 @@ public class StationFragment extends Fragment {
         StationFragment newInstance = new StationFragment();
         newInstance.setArguments(extras);
 
-        fragmentIndex = (Objects.equals(name, DISTANCE_BASED_FRAGLIST)) ? 0 : 1;
+        int fragmentIndex = Objects.equals(name, DISTANCE_BASED_FRAGLIST) ? 1 : 0;
+        extras.putInt("index", fragmentIndex);
+
         return newInstance;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null)
+            fragmentIndex = args.getInt("index");
     }
 
     @Nullable
@@ -52,7 +63,7 @@ public class StationFragment extends Fragment {
         Context context = getContext();
         ContentManager contentManager = ContentManager.getInstance(context);
 
-        adapter = new RecyclerAdapter(context, contentManager.retrieveModels(fragmentIndex == 0
+        adapter = new RecyclerAdapter(context, contentManager.retrieveModels(fragmentIndex == 1
                 ? ContentManager.ComparedPoint.DISTANCE
                 : ContentManager.ComparedPoint.PRICE));
         adapter.setOnItemClickListener((MainActivity) getActivity());

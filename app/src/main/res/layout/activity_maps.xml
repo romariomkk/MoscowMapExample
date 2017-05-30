@@ -16,20 +16,23 @@
 
     </FrameLayout>
 
-    <!--The content of sliding panel itself-->
+    <!--The content of sliding panel-->
     <LinearLayout
         android:id="@+id/bottomSheetView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_behavior="@string/bottom_sheet_behavior"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="48dp">
+        app:behavior_hideable="false"
+        app:layout_behavior="@string/bottom_sheet_behavior">
 
-        <ImageButton
+        <requestFocus/>
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ticker_background"/>
+            android:layout_gravity="center_horizontal"
+            android:elevation="2dp"
+            android:src="@drawable/sticker"/>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
@@ -42,7 +45,7 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="256dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

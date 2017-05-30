@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.romariomkk.moscowmapexample.R;
 
+import java.util.Locale;
+
 public class CustomStationItem extends RelativeLayout {
 
     private TextView priceText;
@@ -53,12 +55,12 @@ public class CustomStationItem extends RelativeLayout {
 
     private void refreshUI()
     {
-        priceText.setText(String.valueOf(station.price));
+        priceText.setText(String.format(Locale.ENGLISH, getResources().getString(R.string.priceValue), station.price));
         lastUpdateText.setText(station.lastUpdateTime);
         brandLogoImage.setImageBitmap(station.brandLogo);
         brandNameText.setText(station.brandName);
         addressText.setText(station.address);
-        currentDistance.setText(String.valueOf(station.currentDistance));
+        currentDistance.setText(String.format(Locale.ENGLISH, getResources().getString(R.string.distance), station.currentDistance));
     }
 
 }

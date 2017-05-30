@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * Created by romariomkk on 29.12.2016.
+ * Created by romariomkk on 29.05.2017.
  */
 public class StationModel {
 

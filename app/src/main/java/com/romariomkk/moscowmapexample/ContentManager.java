@@ -6,7 +6,9 @@ import android.graphics.BitmapFactory;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.romariomkk.moscowmapexample.model.StationModel;
+import com.romariomkk.moscowmapexample.model.StationModelBuilder;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -53,21 +55,58 @@ public class ContentManager {
     {
         Resources resources = context.getResources();
         list = new ArrayList<StationModel>() {{
-            add(new StationModel(new LatLng(55.745742, 37.550884), 35.5, Brands.LUKOIL.toString(), "ул",
-                    BitmapFactory.decodeResource(resources, R.drawable.lukoil), "2 часа назад", 0.2));
-            add(new StationModel(new LatLng(55.746370, 37.559575), 34.5, Brands.ROSGAZ.toString(), "ss",
-                    BitmapFactory.decodeResource(resources, R.drawable.rosgaz), "1 час назад", 2));
-            add(new StationModel(new LatLng(55.746370, 37.559575), 34.6, Brands.ROSGAZ.toString(), "ss",
-                    BitmapFactory.decodeResource(resources, R.drawable.rosgaz), "10 минут назад", 0.8));
-            add(new StationModel(new LatLng(55.741729, 37.546915), 36.5, Brands.LUKOIL.toString(), "ss",
-                    BitmapFactory.decodeResource(resources, R.drawable.lukoil), "Сейчас", 4));
-            add(new StationModel(new LatLng(55.741974, 37.553760), 31.5, Brands.ROSGAZ.toString(), "ss",
-                    BitmapFactory.decodeResource(resources, R.drawable.rosgaz), "Полчаса назад", 12));
+            String[] addresses = resources.getStringArray(R.array.streets);
+            String[] times = resources.getStringArray(R.array.times);
+
+            add(new StationModelBuilder()
+                    .setCoords(new LatLng(55.745742, 37.550884))
+                    .setPrice(35.5)
+                    .setBrandName(Brands.LUKOIL.toString())
+                    .setAddress(addresses[0])
+                    .setBrandLogo(BitmapFactory.decodeResource(resources, R.drawable.lukoil))
+                    .setLastUpdateTime(times[0])
+                    .setCurrentDistance(0.4)
+                    .createStationModel());
+            add(new StationModelBuilder().setCoords(new LatLng(55.746370, 37.559575))
+                    .setPrice(34.5)
+                    .setBrandName(Brands.ROSGAZ.toString())
+                    .setAddress(addresses[1])
+                    .setBrandLogo(BitmapFactory.decodeResource(resources, R.drawable.rosgaz))
+                    .setLastUpdateTime(times[1])
+                    .setCurrentDistance(2.5)
+                    .createStationModel());
+            add(new StationModelBuilder()
+                    .setCoords(new LatLng(55.746370, 37.559575))
+                    .setPrice(34.6).setBrandName(Brands.ROSGAZ.toString())
+                    .setAddress(addresses[2])
+                    .setBrandLogo(BitmapFactory.decodeResource(resources, R.drawable.rosgaz))
+                    .setLastUpdateTime(times[2])
+                    .setCurrentDistance(5.6)
+                    .createStationModel());
+            add(new StationModelBuilder()
+                    .setCoords(new LatLng(55.741729, 37.546915))
+                    .setPrice(36.5)
+                    .setBrandName(Brands.LUKOIL.toString())
+                    .setAddress(addresses[3])
+                    .setBrandLogo(BitmapFactory.decodeResource(resources, R.drawable.lukoil))
+                    .setLastUpdateTime(times[3])
+                    .setCurrentDistance(4)
+                    .createStationModel());
+            add(new StationModelBuilder()
+                    .setCoords(new LatLng(55.741974, 37.553760))
+                    .setPrice(31.5)
+                    .setBrandName(Brands.ROSGAZ.toString())
+                    .setAddress(addresses[4])
+                    .setBrandLogo(BitmapFactory.decodeResource(resources, R.drawable.rosgaz))
+                    .setLastUpdateTime(times[4])
+                    .setCurrentDistance(2.3)
+                    .createStationModel());
         }};
 
+
+
         Collections.sort(list, point.equals(ComparedPoint.PRICE)
-                ?
-                (st1, st2) -> {
+                ? (st1, st2) -> {
                     if (st1.price < st2.price)
                     {
                         return 1;
@@ -78,12 +117,12 @@ public class ContentManager {
                     }
                     return 0;
                 }
-                : (st1, st2) -> {
-                    if (st1.currentDistance < st2.currentDistance)
+                : (st3, st4) -> {
+                    if (st3.currentDistance < st4.currentDistance)
                     {
                         return 1;
                     }
-                    if (st1.currentDistance > st2.currentDistance)
+                    if (st3.currentDistance > st4.currentDistance)
                     {
                         return -1;
                     }

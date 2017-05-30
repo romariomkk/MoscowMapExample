@@ -24,6 +24,7 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+    compileOptions.encoding = 'windows-1251'
 }
 
 dependencies {

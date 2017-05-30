@@ -1,7 +1,7 @@
 package com.romariomkk.moscowmapexample;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -12,8 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
-import android.view.Window;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,9 +34,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
+    private int peekHeight;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    private void setupToolbar() {
+    private void setupToolbar()
+    {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.person);
         toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
@@ -61,24 +62,39 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         coordLayout = (CoordinatorLayout) findViewById(R.id.coordLayout);
         bottomSheetView = coordLayout.findViewById(R.id.bottomSheetView);
+
         BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheetView);
+        int imgHeight = BitmapFactory.decodeResource(getResources(), R.drawable.sticker).getHeight();
+        final int singleItemHeight = dpToPx(64);
+        final int toolBarHeight = dpToPx(48);
+        peekHeight = (imgHeight + singleItemHeight + toolBarHeight);
+        behavior.setPeekHeight(peekHeight);
     }
 
-    private int getStatusBarHeight() {
+    private int getStatusBarHeight()
+    {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
+        if (resourceId > 0)
+        {
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
     }
 
-    private void setupMap() {
+    private int dpToPx(int dp)
+    {
+        return dp * (getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    private void setupMap()
+    {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
-    private void setupViewPager() {
+    private void setupViewPager()
+    {
         FragmentManager fragmentManager = getSupportFragmentManager();
         SlidingViewPageAdapter viewPagerAdapter = new SlidingViewPageAdapter(fragmentManager);
         viewPagerAdapter
@@ -89,14 +105,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         viewPager.setAdapter(viewPagerAdapter);
     }
 
-    private void setupTabLayout() {
+    private void setupTabLayout()
+    {
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         getMenuInflater().inflate(R.menu.map_menu, menu);
         return true;
     }
@@ -111,7 +129,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      * installed Google Play services and returned to the app.
      */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap)
+    {
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -129,7 +148,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onItemClicked(StationModel station) {
+    public void onItemClicked(StationModel station)
+    {
         LatLng coords = station.coords;
         gMap.addMarker(new MarkerOptions().position(coords).anchor(0.5f, 0.5f).flat(false).title(station.address));
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(station.coords, 5));
