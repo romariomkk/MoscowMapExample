@@ -1,4 +1,4 @@
-package com.romariomkk.moscowmapexample;
+package com.romariomkk.moscowmapexample.ui;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.romariomkk.moscowmapexample.model.RecyclerAdapter;
+import com.romariomkk.moscowmapexample.util.ContentManager;
+import com.romariomkk.moscowmapexample.R;
+import com.romariomkk.moscowmapexample.adapter.RecyclerAdapter;
+import com.romariomkk.moscowmapexample.adapter.SlidingViewPageAdapter;
 
 import java.util.Objects;
 

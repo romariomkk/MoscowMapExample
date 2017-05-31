@@ -1,4 +1,4 @@
-package com.romariomkk.moscowmapexample.model;
+package com.romariomkk.moscowmapexample.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.romariomkk.moscowmapexample.R;
+import com.romariomkk.moscowmapexample.model.StationModel;
 
 import java.util.Locale;
 

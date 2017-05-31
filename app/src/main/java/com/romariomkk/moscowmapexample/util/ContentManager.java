@@ -1,14 +1,14 @@
-package com.romariomkk.moscowmapexample;
+package com.romariomkk.moscowmapexample.util;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.romariomkk.moscowmapexample.R;
 import com.romariomkk.moscowmapexample.model.StationModel;
 import com.romariomkk.moscowmapexample.model.StationModelBuilder;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -40,20 +40,13 @@ public class ContentManager {
     private ContentManager(Context c)
     {
         context = c;
+        initList();
     }
 
-    private enum Brands {
-        LUKOIL, ROSGAZ
-    }
-
-    public enum ComparedPoint {
-        PRICE,
-        DISTANCE
-    }
-
-    public ArrayList<StationModel> retrieveModels(ComparedPoint point)
+    private void initList()
     {
         Resources resources = context.getResources();
+
         list = new ArrayList<StationModel>() {{
             String[] addresses = resources.getStringArray(R.array.streets);
             String[] times = resources.getStringArray(R.array.times);
@@ -102,9 +95,24 @@ public class ContentManager {
                     .setCurrentDistance(2.3)
                     .createStationModel());
         }};
+    }
 
+    private enum Brands {
+        LUKOIL, ROSGAZ
+    }
 
+    public enum ComparedPoint {
+        PRICE,
+        DISTANCE
+    }
 
+    public ArrayList<StationModel> getList()
+    {
+        return list;
+    }
+
+    public ArrayList<StationModel> retrieveModels(ComparedPoint point)
+    {
         Collections.sort(list, point.equals(ComparedPoint.PRICE)
                 ? (st1, st2) -> {
                     if (st1.price < st2.price)

@@ -18,6 +18,7 @@
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_gravity="center"
+            android:paddingTop="@dimen/small_margin"
             android:src="@drawable/wallet"/>
 
         <TextView
@@ -76,7 +77,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="4"
-        android:background="@drawable/custom_badge"
+        android:background="@drawable/badge"
         android:gravity="center_horizontal"
         android:paddingTop="@dimen/micro_margin">
 

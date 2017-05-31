@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MoscowMapExample</string>
+    <string name="app_name">Fuel Buddy</string>
     <string name="title_activity_maps">Map</string>
     <string name="searchHint"><i>Поиск заправки</i></string>
     <string name="priceValue"><b>%s</b> €</string>

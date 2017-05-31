@@ -1,4 +1,4 @@
-package com.romariomkk.moscowmapexample.model;
+package com.romariomkk.moscowmapexample.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romariomkk.moscowmapexample.R;
+import com.romariomkk.moscowmapexample.ui.CustomStationItem;
+import com.romariomkk.moscowmapexample.model.StationModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by romariomkk on 29.12.2016.
+ * Created by romariomkk on 29.05.2017.
  */
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
@@ -21,7 +23,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     private OnItemClickListener clickListener;
 
     public interface OnItemClickListener {
-        void onItemClicked(StationModel station);
+        void onItemClicked(StationModel station, int pos);
     }
 
     public RecyclerAdapter(Context c, ArrayList<StationModel> stations) {
@@ -39,7 +41,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         StationModel station = stationList.get(position);
-        holder.setModel(station);
+        holder.setModel(station, position);
     }
 
     @Override
@@ -62,12 +64,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             stationItem = (CustomStationItem) itemView.findViewById(R.id.stationItem);
         }
 
-        public void setModel(StationModel station) {
+        public void setModel(StationModel station, int position) {
             stationItem.setStation(station);
 
             itemView.setOnClickListener(view -> {
                 if (clickListener != null) {
-                    clickListener.onItemClicked(station);
+                    clickListener.onItemClicked(station, position);
                 }
             });
         }

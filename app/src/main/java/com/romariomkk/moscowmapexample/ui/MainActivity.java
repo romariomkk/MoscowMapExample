@@ -1,4 +1,4 @@
-package com.romariomkk.moscowmapexample;
+package com.romariomkk.moscowmapexample.ui;
 
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.graphics.BitmapCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,23 +19,28 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.romariomkk.moscowmapexample.model.RecyclerAdapter;
+import com.romariomkk.moscowmapexample.R;
+import com.romariomkk.moscowmapexample.adapter.PinInfoAdapter;
+import com.romariomkk.moscowmapexample.adapter.RecyclerAdapter;
+import com.romariomkk.moscowmapexample.adapter.SlidingViewPageAdapter;
 import com.romariomkk.moscowmapexample.model.StationModel;
+import com.romariomkk.moscowmapexample.util.ContentManager;
+import com.romariomkk.moscowmapexample.util.Utilities;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, RecyclerAdapter.OnItemClickListener {
 
     private GoogleMap gMap;
-    private TextView title;
 
-    private View bottomSheetView;
-    private CoordinatorLayout coordLayout;
     private ViewPager viewPager;
-    private TabLayout tabLayout;
 
-    private int peekHeight;
+    private Marker currentMarker;
+    private BottomSheetBehavior behavior;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,46 +52,35 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setupMap();
         setupViewPager();
         setupTabLayout();
-
     }
 
     private void setupToolbar()
     {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.person);
-        toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
+        toolbar.setPadding(0, Utilities.getStatusBarHeight(this), 0, 0);
 
-        title = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        TextView title = (TextView) toolbar.findViewById(R.id.toolbar_title);
         title.setText(R.string.app_name);
 
         setSupportActionBar(toolbar);
 
-        coordLayout = (CoordinatorLayout) findViewById(R.id.coordLayout);
-        bottomSheetView = coordLayout.findViewById(R.id.bottomSheetView);
+        CoordinatorLayout coordLayout = (CoordinatorLayout) findViewById(R.id.coordLayout);
+        View bottomSheetView = coordLayout.findViewById(R.id.bottomSheetView);
 
-        BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheetView);
+        behavior = BottomSheetBehavior.from(bottomSheetView);
+        behavior.setPeekHeight(getCalculatedPeekHeight());
+        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    private int getCalculatedPeekHeight()
+    {
         int imgHeight = BitmapFactory.decodeResource(getResources(), R.drawable.sticker).getHeight();
-        final int singleItemHeight = dpToPx(64);
-        final int toolBarHeight = dpToPx(48);
-        peekHeight = (imgHeight + singleItemHeight + toolBarHeight);
-        behavior.setPeekHeight(peekHeight);
+        final int singleItemHeight = Utilities.dpToPx(this, 64);
+        final int toolBarHeight = Utilities.dpToPx(this, 48);
+        return (imgHeight + singleItemHeight + toolBarHeight);
     }
 
-    private int getStatusBarHeight()
-    {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0)
-        {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
-    private int dpToPx(int dp)
-    {
-        return dp * (getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-    }
 
     private void setupMap()
     {
@@ -107,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void setupTabLayout()
     {
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -131,27 +126,67 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
-
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-
         gMap = googleMap;
+        PinInfoAdapter adapter = new PinInfoAdapter(this, ContentManager.getInstance(this).getList());
+        gMap.setInfoWindowAdapter(adapter);
+        gMap.setOnInfoWindowClickListener(Marker::hideInfoWindow);
 
         LatLng moscow = new LatLng(55.754463, 37.608646);
-        gMap.addMarker(new MarkerOptions().position(moscow).title("Marker in Moscow"));
-        //// TODO: 29.05.2017 make more points
-        gMap.moveCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(
+        gMap.animateCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(
                 new LatLng(moscow.latitude - 0.01, moscow.longitude - 0.01),
-                new LatLng(moscow.latitude + 0.01, moscow.longitude + 0.01)), metrics.widthPixels, metrics.heightPixels, 0));
+                new LatLng(moscow.latitude + 0.01, moscow.longitude + 0.01)),
+                metrics.widthPixels, metrics.heightPixels, 0));
 
     }
 
     @Override
-    public void onItemClicked(StationModel station)
+    public void onItemClicked(StationModel station, int pos)
     {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
         LatLng coords = station.coords;
-        gMap.addMarker(new MarkerOptions().position(coords).anchor(0.5f, 0.5f).flat(false).title(station.address));
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(station.coords, 5));
+        hidePreviousMarker();
+        initNewMarker(pos, coords);
+
+        if (!currentMarker.isInfoWindowShown())
+            currentMarker.showInfoWindow();
+        else
+            currentMarker.hideInfoWindow();
+
+        collapseBottomSheet();
+
+        gMap.animateCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(
+                new LatLng(coords.latitude - 0.01, coords.longitude - 0.01),
+                new LatLng(coords.latitude + 0.01, coords.longitude + 0.01)),
+                metrics.widthPixels, metrics.heightPixels, 0));
+    }
+
+    private void collapseBottomSheet()
+    {
+        if (behavior != null)
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    private void initNewMarker(int pos, LatLng coords)
+    {
+        currentMarker = gMap.addMarker(new MarkerOptions()
+                .position(coords)
+                .anchor(1f, 1f)
+                .flat(false)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.green_arrow))
+                .title(Integer.toString(pos)));
+    }
+
+    private void hidePreviousMarker()
+    {
+        if (currentMarker != null)
+        {
+            currentMarker.hideInfoWindow();
+            currentMarker.setVisible(false);
+        }
     }
 }

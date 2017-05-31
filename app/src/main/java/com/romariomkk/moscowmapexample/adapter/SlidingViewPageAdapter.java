@@ -1,4 +1,4 @@
-package com.romariomkk.moscowmapexample;
+package com.romariomkk.moscowmapexample.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
